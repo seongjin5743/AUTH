@@ -23,7 +23,7 @@ def login(request):
         if form.is_valid():
             auth_login(request, form.get_user())
 
-            return redirect('accounts:login')
+            return redirect('articles:index')
     else:
         form = CustomAuthenticationForm(request.POST)
 
@@ -34,4 +34,4 @@ def login(request):
 
 def logout(request):
     auth_logout(request)
-    return redirect('accounts:login')
+    return redirect('articles:index')
