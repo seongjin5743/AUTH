@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
-from .models import User
+from .forms import CustomUserCreationForm, CustomAuthenticationForm  # 사용자 정의 폼 가져오기
+from django.contrib.auth import login as auth_login  # 로그인 함수
+from django.contrib.auth import logout as auth_logout  # 로그아웃 함수
+from .models import User  # User 모델 가져오기
 
 # 회원가입 뷰
 def signup(request):
@@ -46,9 +46,10 @@ def logout(request):
     auth_logout(request)  # 사용자 로그아웃 처리
     return redirect('articles:index')  # 로그아웃 후 메인 페이지로 리다이렉트
 
+# 프로필 뷰
 def profile(request, username):
-    user_profile = User.objects.get(username=username)
+    user_profile = User.objects.get(username=username)  # username에 해당하는 사용자 정보 가져오기
     context = {
-        'user_profile': user_profile,
+        'user_profile': user_profile,  # 템플릿에 전달할 사용자 정보
     }
-    return render(request, 'profile.html', context)
+    return render(request, 'profile.html', context)  # 프로필 템플릿 렌더링
