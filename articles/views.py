@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import ArticleForm
+from .forms import ArticleForm, CommentForm
 from .models import Article
 from django.contrib.auth.decorators import login_required  # 로그인 여부를 확인
 
@@ -39,7 +39,27 @@ def delete(request, id):
 
 def detail(request, id):
     article = Article.objects.get(id=id)
+    form = CommentForm()
     context = {
         'article': article,
+        'form': form,
     }
     return render(request, 'detail.html', context)
+
+@login_required
+def comment_create(request, article_id):
+    form = CommentForm(request.POST)
+    
+    if form.is_valid():
+        comment = form.save(commit=False)
+
+        # 객체 저장하는 경우
+        # comment.user = request.user
+        # article = Article.objects.get(id=id)
+        # comment.article = article
+
+        # id 값을 저장하는 경우
+        comment.user_id = request.user.id
+        comment.article_id = article_id
+        comment.save()
+        return redirect('articles:detail', id=article_id)
