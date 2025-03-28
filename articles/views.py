@@ -36,3 +36,10 @@ def delete(request, id):
     if request.user == article.user:
         article.delete()
     return redirect('articles:index')
+
+def detail(request, id):
+    article = Article.objects.get(id=id)
+    context = {
+        'article': article,
+    }
+    return render(request, 'detail.html', context)
