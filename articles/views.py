@@ -14,6 +14,15 @@ def index(request):
     }
     return render(request, 'index.html', context)  # 게시글 목록 템플릿 렌더링
 
+def detail(request, id):
+    article = Article.objects.get(id=id)
+    form = CommentForm()
+    context = {
+        'article': article,
+        'form': form,
+    }
+    return render(request, 'detail.html', context)
+
 @login_required  # 로그인하지 않은 사용자는 로그인 페이지로 리다이렉트
 def create(request):
     if request.method == 'POST':  # POST 요청일 경우, 폼 데이터를 처리
@@ -38,14 +47,9 @@ def delete(request, id):
         article.delete()
     return redirect('articles:index')
 
-def detail(request, id):
-    article = Article.objects.get(id=id)
-    form = CommentForm()
-    context = {
-        'article': article,
-        'form': form,
-    }
-    return render(request, 'detail.html', context)
+@login_required
+def update(request, id):
+    pass
 
 @login_required
 def comment_create(request, article_id):
