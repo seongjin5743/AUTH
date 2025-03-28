@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import ArticleForm, CommentForm
-from .models import Article
+from .models import Article, Comment
 from django.contrib.auth.decorators import login_required  # 로그인 여부를 확인
 
 def home(request):
@@ -31,6 +31,7 @@ def create(request):
     }
     return render(request, 'create.html', context)  # 게시글 작성 템플릿 렌더링
 
+@login_required
 def delete(request, id):
     article = Article.objects.get(id=id)
     if request.user == article.user:
@@ -63,3 +64,10 @@ def comment_create(request, article_id):
         comment.article_id = article_id
         comment.save()
         return redirect('articles:detail', id=article_id)
+
+@login_required
+def comment_delete(request, article_id, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    if request.user == comment.user:
+        comment.delete()
+    return redirect('articles:detail', id=article_id)
