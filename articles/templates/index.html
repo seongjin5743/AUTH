@@ -5,5 +5,9 @@
         <h1>{{article.title}}</h1>
         <p>{{article.content}}</p>
         <p>{{article.user}}</p>
+        <p>{{article.id}}</p>
+        {% if user == article.user %}
+            <a href="{% url 'articles:delete' article.id %}">delete</a>
+        {% endif %}
     {% endfor %}
 {% endblock %}

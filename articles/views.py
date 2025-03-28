@@ -3,6 +3,9 @@ from .forms import ArticleForm
 from .models import Article
 from django.contrib.auth.decorators import login_required  # 로그인 여부를 확인
 
+def home(request):
+    return redirect('/articles/')
+
 # 메인 페이지 (게시글 목록) 뷰
 def index(request):
     articles = Article.objects.all()  # 모든 게시글을 가져옴
@@ -27,3 +30,9 @@ def create(request):
         'form': form,  # 템플릿에 전달할 폼 객체
     }
     return render(request, 'create.html', context)  # 게시글 작성 템플릿 렌더링
+
+def delete(request, id):
+    article = Article.objects.get(id=id)
+    if request.user == article.user:
+        article.delete()
+    return redirect('articles:index')
